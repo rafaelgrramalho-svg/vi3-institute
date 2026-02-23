@@ -359,7 +359,7 @@ export default function HomePage() {
 
           <div className="mt-8">
             <Link
-              href="/low-ticket"
+              href="/ebookmar"
               className="inline-block rounded-lg border-2 border-navy-600 px-8 py-4 font-bold text-white transition hover:border-gold-500 hover:text-gold-400"
             >
               NÃO QUERO AGORA
