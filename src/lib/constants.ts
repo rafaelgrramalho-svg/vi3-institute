@@ -16,8 +16,7 @@ export const PRODUCT = {
   installments: "12x de R$ 14,52",
   guarantee: 90,
   duration: "90 dias",
-  // Substitua pela URL real do checkout Hotmart
-  checkoutUrl: "#checkout-hotmart",
+  checkoutUrl: "https://pay.hotmart.com/F104338791L",
 } as const;
 
 export const MENTORSHIP = {
@@ -42,8 +41,7 @@ export const LOW_TICKET = {
   guarantee: 7,
   description:
     "O guia pratico que revela o sistema de 3 pilares para sair da invisibilidade e ser reconhecido como autoridade no seu mercado — mesmo sem milhares de seguidores.",
-  // Substitua pela URL real do checkout Hotmart
-  checkoutUrl: "#checkout-ebook-hotmart",
+  checkoutUrl: "https://pay.hotmart.com/I104568240I",
 } as const;
 
 export const LINKS = {
