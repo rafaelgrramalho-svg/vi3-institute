@@ -64,16 +64,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* INSIGHT SECTION */}
-      <section className="bg-white px-6 py-8">
-        <div className="mx-auto max-w-4xl">
-          <p className="text-center text-lg text-navy-600">
-            Para ser reconhecido como autoridade, não é preciso ter anos de experiência, nem certificações caras, nem
-            aparecer na mídia ou ter milhares de seguidores
-          </p>
-        </div>
-      </section>
-
       {/* TRANSFORMATIONS SECTION */}
       <section className="bg-navy-50 px-6 py-16">
         <div className="mx-auto max-w-4xl">
