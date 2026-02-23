@@ -31,20 +31,6 @@ export default function HomePage() {
               Ser uma autoridade reconhecida é a chave para aumentar em{" "}
               <span className="font-bold text-gold-400">68%</span> as vendas e só é alcançável através do Método M.A.R.
             </p>
-
-            <div className="mt-10 flex flex-col gap-4 sm:justify-center">
-              <a
-                href="#oferta"
-                className="animate-pulse-gold rounded-lg bg-gold-500 px-8 py-4 text-center text-lg font-bold text-navy-950 transition hover:bg-gold-400"
-              >
-                QUERO AUMENTAR MINHA RECEITA EM 68%
-              </a>
-            </div>
-
-            <p className="mx-auto mt-8 max-w-2xl text-navy-300">
-              Para ser reconhecido como autoridade, não é preciso ter anos de experiência, nem certificações caras, nem
-              aparecer na mídia ou ter milhares de seguidores
-            </p>
           </div>
         </div>
       </section>
@@ -78,16 +64,77 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* SOCIAL PROOF */}
-      <section className="bg-navy-50 px-6 py-16">
-        <div className="mx-auto max-w-5xl">
+      {/* INSIGHT SECTION */}
+      <section className="bg-white px-6 py-8">
+        <div className="mx-auto max-w-4xl">
           <p className="text-center text-lg text-navy-600">
-            Consultores, coaches, designers, psicólogos e especialistas de 47 nichos diferentes
+            Para ser reconhecido como autoridade, não é preciso ter anos de experiência, nem certificações caras, nem
+            aparecer na mídia ou ter milhares de seguidores
           </p>
+        </div>
+      </section>
 
-          <div className="mt-12 rounded-xl bg-white p-8 text-center shadow-sm">
-            <p className="text-5xl font-extrabold text-gold-500">87%</p>
-            <p className="mt-2 text-lg text-navy-600">Aumentaram seus preços em 50%+ sem perder clientes</p>
+      {/* TRANSFORMATIONS SECTION */}
+      <section className="bg-navy-50 px-6 py-16">
+        <div className="mx-auto max-w-4xl">
+          <h2 className="mb-12 text-center text-3xl font-bold md:text-4xl">
+            Transformações Reais de Profissionais Como Você
+          </h2>
+
+          <div className="space-y-6">
+            {[
+              {
+                name: "Laura Cardoso",
+                role: "Paisagista",
+                image: "/images/foto-14-laura.webp",
+                before: "R$ 4.500/mês | 50h/semana",
+                after: "R$ 6.500/mês | 35h/semana",
+              },
+              {
+                name: "João Honório",
+                role: "Corretor de Imóveis",
+                image: "/images/foto-15-joao.webp",
+                before: "R$ 5.400/mês | 1-2 vendas",
+                after: "R$ 13.600/mês | 2-6 vendas",
+              },
+              {
+                name: "Ana Costa",
+                role: "Psicóloga Clínica",
+                image: "/images/foto-16-ana.webp",
+                before: "R$ 3.000/mês | Agenda lotada",
+                after: "R$ 7.600/mês | Agenda equilibrada",
+              },
+            ].map((case_, i) => (
+              <div key={i} className="flex flex-col gap-6 rounded-xl bg-white p-8 md:flex-row md:items-center">
+                <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-full">
+                  <Image
+                    src={case_.image}
+                    alt={case_.name}
+                    width={96}
+                    height={96}
+                    className="h-full w-full object-cover"
+                    loading="lazy"
+                  />
+                </div>
+
+                <div className="flex-1">
+                  <p className="text-lg font-bold">{case_.name}</p>
+                  <p className="text-sm text-gold-600">{case_.role}</p>
+
+                  <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center">
+                    <div className="rounded-lg bg-navy-50 px-4 py-2 text-center">
+                      <p className="text-xs font-semibold text-navy-400">ANTES</p>
+                      <p className="font-bold text-navy-700">{case_.before}</p>
+                    </div>
+                    <span className="hidden text-2xl text-gold-500 sm:block">→</span>
+                    <div className="rounded-lg bg-success/10 px-4 py-2 text-center">
+                      <p className="text-xs font-semibold text-success">DEPOIS</p>
+                      <p className="font-bold text-success">{case_.after}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -171,80 +218,6 @@ export default function HomePage() {
               </div>
             ))}
           </div>
-
-          <div className="mt-12 text-center">
-            <a
-              href="#oferta"
-              className="inline-block rounded-lg border-2 border-gold-500 px-8 py-4 text-lg font-bold text-gold-500 transition hover:bg-gold-500 hover:text-navy-950"
-            >
-              QUERO APLICAR O MÉTODO M.A.R.
-            </a>
-          </div>
-        </div>
-      </section>
-
-      {/* TRANSFORMATIONS SECTION */}
-      <section className="bg-navy-50 px-6 py-16">
-        <div className="mx-auto max-w-4xl">
-          <h2 className="mb-12 text-center text-3xl font-bold md:text-4xl">
-            Transformações Reais de Profissionais Como Você
-          </h2>
-
-          <div className="space-y-6">
-            {[
-              {
-                name: "Laura Cardoso",
-                role: "Paisagista",
-                image: "/images/foto-14-laura.webp",
-                before: "R$ 4.500/mês | 50h/semana",
-                after: "R$ 6.500/mês | 35h/semana",
-              },
-              {
-                name: "João Honório",
-                role: "Corretor de Imóveis",
-                image: "/images/foto-15-joao.webp",
-                before: "R$ 5.400/mês | 1-2 vendas",
-                after: "R$ 13.600/mês | 2-6 vendas",
-              },
-              {
-                name: "Ana Costa",
-                role: "Psicóloga Clínica",
-                image: "/images/foto-16-ana.webp",
-                before: "R$ 3.000/mês | Agenda lotada",
-                after: "R$ 7.600/mês | Agenda equilibrada",
-              },
-            ].map((case_, i) => (
-              <div key={i} className="flex flex-col gap-6 rounded-xl bg-white p-8 md:flex-row md:items-center">
-                <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-full">
-                  <Image
-                    src={case_.image}
-                    alt={case_.name}
-                    width={96}
-                    height={96}
-                    className="h-full w-full object-cover"
-                    loading="lazy"
-                  />
-                </div>
-
-                <div className="flex-1">
-                  <p className="text-lg font-bold">{case_.name}</p>
-                  <p className="text-sm text-gold-600">{case_.role}</p>
-
-                  <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center">
-                    <div className="rounded-lg bg-navy-50 px-4 py-2 text-center">
-                      <p className="text-xs font-semibold text-navy-400">ANTES</p>
-                      <p className="font-bold text-navy-700">{case_.before}</p>
-                    </div>
-                    <span className="hidden text-2xl text-gold-500 sm:block">→</span>
-                    <div className="rounded-lg bg-success/10 px-4 py-2 text-center">
-                      <p className="text-xs font-semibold text-success">DEPOIS</p>
-                      <p className="font-bold text-success">{case_.after}</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
         </div>
       </section>
 
@@ -279,8 +252,14 @@ export default function HomePage() {
 
             <div className="rounded-xl border border-navy-200 bg-white p-8 shadow-sm">
               <p className="text-3xl">🎁</p>
-              <h3 className="mt-4 text-xl font-bold">Bônus 3 & 4: Planilhas e Templates</h3>
-              <p className="mt-2 text-navy-600">Ferramentas prontas para usar no seu negócio</p>
+              <h3 className="mt-4 text-xl font-bold">Bônus 3: Planilha de Controle de Clientes</h3>
+              <p className="mt-2 text-navy-600">Ferramenta pronta para organizar e acompanhar seus clientes</p>
+            </div>
+
+            <div className="rounded-xl border border-navy-200 bg-white p-8 shadow-sm">
+              <p className="text-3xl">🎁</p>
+              <h3 className="mt-4 text-xl font-bold">Bônus 4: Templates de Arquétipos de Clientes</h3>
+              <p className="mt-2 text-navy-600">Templates prontos para identificar e segmentar seus clientes ideais</p>
             </div>
           </div>
         </div>
