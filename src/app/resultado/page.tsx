@@ -1,18 +1,106 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { SITE } from "@/lib/constants";
+import { profiles, quizQuestions, QuizProfile } from "@/lib/quiz-data";
+
+interface QuizResult {
+  profile?: QuizProfile;
+  answers?: number[];
+}
 
 export default function ResultadoPage() {
+  const router = useRouter();
   const [nome, setNome] = useState("");
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [quizResult, setQuizResult] = useState<QuizResult | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  // Carregar dados do quiz do sessionStorage
+  useEffect(() => {
+    const savedResult = sessionStorage.getItem("quizResult");
+    const savedAnswers = sessionStorage.getItem("quizAnswers");
+
+    if (savedResult && savedAnswers) {
+      setQuizResult({
+        profile: JSON.parse(savedResult),
+        answers: JSON.parse(savedAnswers),
+      });
+    } else {
+      // Se não houver resultado, redirecionar para o quiz
+      router.push("/quiz");
+    }
+  }, [router]);
+
+  // Calcular scores do quiz
+  const calculateScores = (answers?: number[]) => {
+    if (!answers) return null;
+
+    const scores = { invisivel: 0, desconhecida: 0, emergente: 0, estabelecida: 0 };
+
+    answers.forEach((answerIndex, questionIndex) => {
+      const question = quizQuestions[questionIndex];
+      if (question && question.options[answerIndex]) {
+        const option = question.options[answerIndex];
+        scores.invisivel += option.scores.invisivel;
+        scores.desconhecida += option.scores.desconhecida;
+        scores.emergente += option.scores.emergente;
+        scores.estabelecida += option.scores.estabelecida;
+      }
+    });
+
+    return scores;
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Aqui você integraria com uma ferramenta de email/CRM
-    // Por enquanto, apenas marca como enviado
-    setSubmitted(true);
+    setLoading(true);
+    setError("");
+
+    try {
+      if (!quizResult?.profile) {
+        throw new Error("Resultado do quiz não encontrado");
+      }
+
+      const scores = calculateScores(quizResult.answers);
+
+      // Enviar dados para MailerLite via API
+      const response = await fetch("/api/quiz-result", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: email.toLowerCase().trim(),
+          name: nome.trim(),
+          profile: quizResult.profile.id,
+          answers: quizResult.answers,
+          scores,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Erro ao enviar resultado");
+      }
+
+      // Marcar como enviado
+      setSubmitted(true);
+
+      // Limpar sessionStorage
+      sessionStorage.removeItem("quizResult");
+      sessionStorage.removeItem("quizAnswers");
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : String(err);
+      setError(errorMessage);
+      console.error("Erro ao enviar resultado:", errorMessage);
+    } finally {
+      setLoading(false);
+    }
   };
 
   if (submitted) {
@@ -61,6 +149,46 @@ export default function ResultadoPage() {
       </div>
 
       <div className="mx-auto max-w-2xl px-6 py-12">
+        {/* Resultado do Quiz */}
+        {quizResult?.profile && (
+          <div className="mb-10 rounded-2xl border-2 border-gold-500/30 bg-gold-500/5 p-8">
+            <h2 className="text-2xl font-bold text-gold-400">Seu Perfil de Autoridade</h2>
+            <h3 className="mt-2 text-3xl font-extrabold leading-tight">
+              {quizResult.profile.title}
+            </h3>
+            <p className="mt-3 text-lg text-gold-300">{quizResult.profile.subtitle}</p>
+            <p className="mt-6 text-base text-navy-200">{quizResult.profile.description}</p>
+
+            <div className="mt-8">
+              <h4 className="font-semibold text-gold-400">Seus Pontos Fortes:</h4>
+              <ul className="mt-3 space-y-2">
+                {quizResult.profile.strengths.map((strength, idx) => (
+                  <li key={idx} className="flex items-start gap-2 text-navy-200">
+                    <span className="mt-1 text-gold-400">✓</span>
+                    {strength}
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="mt-8">
+              <h4 className="font-semibold text-gold-400">Áreas de Atenção:</h4>
+              <ul className="mt-3 space-y-2">
+                {quizResult.profile.risks.map((risk, idx) => (
+                  <li key={idx} className="flex items-start gap-2 text-navy-200">
+                    <span className="mt-1 text-red-400">⚠</span>
+                    {risk}
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <p className="mt-8 rounded-lg bg-navy-900/50 p-4 text-center text-base text-navy-100">
+              <strong>Próximo Passo:</strong> {quizResult.profile.cta}
+            </p>
+          </div>
+        )}
+
         <h1 className="text-3xl font-extrabold leading-tight md:text-4xl">
           Seu resultado personalizado está pronto!
         </h1>
@@ -68,6 +196,13 @@ export default function ResultadoPage() {
         <p className="mt-6 text-lg text-navy-300">
           Para enviar seu resultado e as estratégias específicas do Método M.A.R. para seu tipo de profissional, precisamos de:
         </p>
+
+        {/* Error Message */}
+        {error && (
+          <div className="mt-6 rounded-lg bg-red-500/10 p-4 text-red-400">
+            {error}
+          </div>
+        )}
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="mt-10 space-y-6">
@@ -101,9 +236,14 @@ export default function ResultadoPage() {
 
           <button
             type="submit"
-            className="animate-pulse-gold w-full rounded-lg bg-gold-500 px-8 py-4 text-lg font-bold text-navy-950 transition hover:bg-gold-400"
+            disabled={loading}
+            className={`w-full rounded-lg px-8 py-4 text-lg font-bold transition ${
+              loading
+                ? "bg-gold-600 text-navy-950 cursor-not-allowed opacity-75"
+                : "animate-pulse-gold bg-gold-500 text-navy-950 hover:bg-gold-400"
+            }`}
           >
-            Enviar Meu Resultado
+            {loading ? "Enviando..." : "Enviar Meu Resultado"}
           </button>
         </form>
 
